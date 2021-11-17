@@ -1,0 +1,18 @@
+from typing import Optional
+from cfg import Opts
+from torch.nn import functional as F
+from kd_lab.utils.model_loader import ModelManager
+from ..base import BaseTrainer
+
+
+class ResNetClsBaseTrainer(BaseTrainer):
+    def __init__(
+        self,
+        opt: Opts,
+        device_id: Optional[int]=None
+    ) -> None:
+        super().__init__(opt, device_id=device_id)
+        self.model_manager = ModelManager(opt, self.saver)
+
+    def logit_to_pred(self, logit):
+        return F.softmax(logit, dim=1)

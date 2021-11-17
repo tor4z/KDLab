@@ -1,0 +1,168 @@
+arch:
+  # BYOL SSL
+  BYOLResNet50SSLTrainer:
+    - arch/resnet50.yml
+    - ssl/byol.yml
+  BYOLResNet50ClsTrainer:
+    - arch/resnet50.yml
+    - ssl/byol.yml
+  BYOLViTSSLTrainer:
+    - arch/vit.yml
+    - ssl/byol.yml
+  BYOLViTClsTrainer:
+    - arch/vit.yml
+    - ssl/byol.yml
+
+  # Dino SSL
+  DINOResNet50SSLTrainer:
+    - arch/resnet50.yml
+    - ssl/dino.yml
+  DINOResNet50ClsTrainer:
+    - arch/resnet50.yml
+    - ssl/dino.yml
+  DINOViTSSLTrainer:
+    - arch/vit.yml
+    - ssl/dino.yml
+  DINOViTClsTrainer:
+    - arch/vit.yml
+    - ssl/dino.yml
+
+  # MoCoV3 SSL
+  MoCoV3ResNet50SSLTrainer:
+    - arch/resnet50.yml
+    - ssl/mocov3.yml
+  MoCoV3ResNet50ClsTrainer:
+    - arch/resnet50.yml
+    - ssl/mocov3.yml
+  MoCoV3ViTSSLTrainer:
+    - arch/vit.yml
+    - ssl/mocov3.yml
+  MoCoV3ViTClsTrainer:
+    - arch/vit.yml
+    - ssl/mocov3.yml
+
+  # MoCoV2 SSL
+  MoCoV2ResNet50SSLTrainer:
+    - arch/resnet50.yml
+    - ssl/mocov2.yml
+  MoCoV2ResNet50ClsTrainer:
+    - arch/resnet50.yml
+    - ssl/mocov2.yml
+  MoCoV2ViTSSLTrainer:
+    - arch/vit.yml
+    - ssl/mocov2.yml
+  MoCoV2ViTClsTrainer:
+    - arch/vit.yml
+    - ssl/mocov2.yml
+
+  # MoCoV1 SSL
+  MoCoV1ResNet50SSLTrainer:
+    - arch/resnet50.yml
+    - ssl/mocov1.yml
+  MoCoV1ResNet50ClsTrainer:
+    - arch/resnet50.yml
+    - ssl/mocov1.yml
+  MoCoV1ViTSSLTrainer:
+    - arch/vit.yml
+    - ssl/mocov1.yml
+  MoCoV1ViTClsTrainer:
+    - arch/vit.yml
+    - ssl/mocov1.yml
+
+  # SimCLRV1 SSL
+  SimCLRV1ResNet50SSLTrainer:
+    - arch/resnet50.yml
+    - ssl/simclrv1.yml
+  SimCLRV1ResNet50ClsTrainer:
+    - arch/resnet50.yml
+    - ssl/simclrv1.yml
+  SimCLRV1ViTSSLTrainer:
+    - arch/vit.yml
+    - ssl/simclrv1.yml
+  SimCLRV1ViTClsTrainer:
+    - arch/vit.yml
+    - ssl/simclrv1.yml
+
+  # WinSSL SSL
+  WinSSLCNNResNet50SSLTrainer:
+    - arch/resnet50.yml
+    - ssl/win_ssl_cnn.yml
+  WinSSLCNNResNet50ClsTrainer:
+    - arch/resnet50.yml
+    - ssl/win_ssl_cnn.yml
+  WinSSLCNNResNet50ClsWithAUGTrainer:
+    - arch/resnet50.yml
+    - ssl/win_ssl_cnn.yml
+
+  # Distillation
+  DistillTeacherResNet50ClsTrainer:
+    - arch/resnet50.yml
+  OfflineResNetIRPEDistiller:
+    - arch/rpe.yml
+    - distill/off_distill.yml
+  OnlineResNetIRPEDistiller:
+    - arch/rpe.yml
+    - arch/resnet50.yml
+    - distill/on_distill.yml
+
+
+  # Classifier
+  ResNet50ClsTrainer: arch/resnet50.yml
+  VitTrainer: arch/vit.yml
+  FGVCTrainer: arch/fgvc.yml
+  WSDANTrainer: arch/wsdan.yml
+  TransFGTrainer: arch/trans_fg.yml
+  T2TTrainer: arch/t2t.yml
+  CvTTrainer: arch/cvt.yml
+  T2TOfficialTrainer: arch/t2t_official.yml
+  TNTTrainer: arch/tnt.yml
+  SEFTrainer: arch/sef.yml
+  DPTTrainer: arch/dpt.yml
+  PVTTrainer: arch/pvt.yml
+  ViTPSTrainer: arch/vit_ps.yml
+  CrossViTTrainer: arch/cross_vit.yml
+  CaitTrainer: arch/cait.yml
+  DeepViTTrainer: arch/deep_vit.yml
+  CCTTrainer: arch/cct.yml
+  PitTrainer: arch/pit.yml
+  LeViTTrainer: arch/le_vit.yml
+  TwinsSVTTrainer: arch/twins_svt.yml
+  NestTrainer: arch/nest.yml
+  RPETrainer: arch/rpe.yml
+  ResNet50WinLLClsTrainer: arch/resnet50_win_ll.yml
+  FNetTrainer: arch/fnet.yml
+
+
+dataset:
+  InWClsCropDataset: data/inw_cls.yml
+  InWClsDataset: data/inw_cls.yml
+  # 224
+  InWCls224Dataset: data/inw_cls224.yml
+  InWCls224RawDataset: data/inw_cls224.yml
+  InWCls224SQDataset: data/inw_cls224sq.yml
+  InWCls224SQCRDataset: data/inw_cls224sq.yml
+  # 256
+  InWCls256Dataset: data/inw_cl2564.yml
+  InWCls256RawDataset: data/inw_cls256.yml
+  InWCls256SQDataset: data/inw_cls256sq.yml
+  InWCls256SQCRDataset: data/inw_cls256sq.yml
+  # 384
+  InWCls384Dataset: data/inw_cls384.yml
+  InWCls384RawDataset: data/inw_cls384.yml
+  InWCls384SQDataset: data/inw_cls384sq.yml
+  InWCls384SQCRDataset: data/inw_cls384sq.yml
+  # 448
+  InWCls448Dataset: data/inw_cls448.yml
+  InWCls448RawDataset: data/inw_cls448.yml
+  InWCls448SQDataset: data/inw_cls448sq.yml
+  InWCls448SQCRDataset: data/inw_cls448sq.yml
+
+  InWSSLDataset: data/inw_cls.yml
+  InWSSL224Dataset: data/inw_cls224.yml
+  InWSSL256Dataset: data/inw_cls256.yml
+  InWSSL448Dataset: data/inw_cls448.yml
+  InWSSL224SQDataset: data/inw_cls224sq.yml
+  InWSSL224SQDataset: data/inw_cls224sq.yml
+  InWSSL256SQDataset: data/inw_cls256sq.yml
+  InWSSL448SQDataset: data/inw_cls448sq.yml
+  InWSSL224SCDataset: data/inw_cls224sc.yml

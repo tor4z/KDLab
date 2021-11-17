@@ -1,0 +1,2 @@
+distillation_type: hard
+distillation_tau: 1.0

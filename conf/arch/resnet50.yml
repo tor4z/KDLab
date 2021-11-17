@@ -1,0 +1,17 @@
+import:
+  - ../common
+
+
+pretrained: false
+progress: true
+
+num_classes: 2
+batch_size: 16
+num_workers: 8
+epochs: 200
+
+normalization: sigmoid
+hidden_layer: backbone.avgpool
+# for win_ssl_cnn
+global_layer: backbone.avgpool
+local_layer: backbone.layer3
