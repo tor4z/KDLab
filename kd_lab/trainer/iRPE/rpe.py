@@ -20,10 +20,6 @@ class RPETrainer(RPEBaseTrainer):
     def __init__(self, opt: Opts) -> None:
         super().__init__(opt)
         net = get_deit_rpe(opt)
-        # print(net)
-        # self.optimizer = SGD(
-        #     net.parameters(), lr=opt.lr, momentum=0.9,
-        #     weight_decay=opt.get('weight_decay', 1.0e-4))
         self.optimizer = create_optimizer_v2(
             net,
             opt.get('optimizer', 'sgd'),

@@ -28,9 +28,6 @@ class ResNet50ClsTrainer(ResNetClsBaseTrainer):
         self.scheduler = StepLR(self.optimizer, 2, 0.98)
         self.net = yield self.to_gpu(net)
         self.loss_fn = nn.CrossEntropyLoss()
-        # self.eval_no_grad = False
-        # self.inspector = Inspector(opt, self.net)
-        # self.inspector.regist_layers('backbone.layer4.2.relu')
 
     @gen.detach_cpu
     @gen.synchrony
@@ -62,17 +59,6 @@ class ResNet50ClsTrainer(ResNetClsBaseTrainer):
         loss = self.loss_fn(logits, labels)
 
         self.show_images('eval_image', images)
-        # self.inspector.inspect(images)
-        # cam_image = self.inspector.show_cam_on_images(strength=1.5)[0]
-        # self.show_images('cam_image', cam_image)
-        # pred = torch.sigmoid(logits).clone().detach()
-        # pred[pred>0.5] = 1.0
-        # pred[pred<=0.5] = 0.0
-        # result = (f'score: {torch.sigmoid(logits)} <br/>'
-        #           f'pred: {pred} <br/>'
-        #           f'label: {labels} <br/>'
-        #           f'result: {pred == labels}')
-        # self.dashboard.add_text('reselt', result)
         preds = self.logit_to_pred(logits)
         return loss, preds, labels
 
