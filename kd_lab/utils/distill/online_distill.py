@@ -67,9 +67,15 @@ class OnlineDistillTrainer(BaseDistillTrainer):
         images, labels, teacher_logits = item
 
         self.student_optimizer.zero_grad()
-        logits = self.student_model(images)
+        student_out = self.student_model(images)
+        if isinstance(student_out, tuple):
+            logits = student_out[0]
+            dist_logits = student_out[1]
+        else:
+            logits = student_out
+            dist_logits = student_out
         actual_loss = self.actual_loss_fn(logits, labels)
-        distill_loss = self.distill_loss_fn(logits, teacher_logits)
+        distill_loss = self.distill_loss_fn(dist_logits, teacher_logits)
         loss = actual_loss + distill_loss
         loss.backward()
         self.student_optimizer.step()

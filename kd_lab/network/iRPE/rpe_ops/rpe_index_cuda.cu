@@ -27,7 +27,8 @@ __global__ void rpe_index_forward_gpu_kernel(
     index_t n, scalar_t *p_Y, const scalar_t *__restrict__ p_input,
     const index_t *__restrict__ p_index, index_t num_buckets, index_t H,
     index_t L_query, index_t L_key, index_t L_qk, index_t s0, index_t s1,
-    index_t s2, index_t s3) {
+    index_t s2, index_t s3
+){
   CUDA_KERNEL_LOOP(i, n) {
     index_t gi = i / L_key;
     const index_t qi = gi % L_query;
@@ -40,6 +41,7 @@ __global__ void rpe_index_forward_gpu_kernel(
   }
 }
 
+
 template <typename scalar_t>
 __global__ void rpe_index_backward_gpu_kernel(
     index_t n, scalar_t *p_grad_input, const index_t *__restrict__ p_index,
@@ -51,6 +53,7 @@ __global__ void rpe_index_backward_gpu_kernel(
     gpuAtomicAdd(p_grad_input + input_i, v);
   }
 }
+
 
 at::Tensor rpe_index_forward_gpu(torch::Tensor input, torch::Tensor index) {
   /*
@@ -93,6 +96,7 @@ at::Tensor rpe_index_forward_gpu(torch::Tensor input, torch::Tensor index) {
       });
   return Y;
 }
+
 
 void rpe_index_backward_gpu(torch::Tensor grad_input, torch::Tensor grad_output,
                             torch::Tensor index) {

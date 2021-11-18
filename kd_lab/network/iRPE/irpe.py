@@ -185,6 +185,7 @@ def _rp_2d_product(diff, **kwargs):
     c = piecewise_index(diff[:, :, 1], **kwargs) + \
         beta_int  # [0, 2 * beta_int]
     pid = r * S + c
+
     return pid
 
 
@@ -255,7 +256,7 @@ def get_num_buckets(method, alpha, beta, gamma):
     """
     beta_int = int(beta)
     if method == METHOD.PRODUCT:
-        # IDs in [0, (2 * beta_int + 1)^2) for Product method
+        # IDs in [0, (2 * beta_int + 1)^2] for Product method
         num_buckets = (2 * beta_int + 1) ** 2
     else:
         # IDs in [-beta_int, beta_int] except of Product method
@@ -369,20 +370,32 @@ def get_bucket_ids_2d(method, height, width,
     num_buckets: int
         The number of buckets including `skip` token.
     """
-    assert skip in [
-        0, 1], f"`get_bucket_ids_2d` only support skip is 0 or 1, current skip={skip}"
-    bucket_ids, num_buckets, L = get_bucket_ids_2d_without_skip(method, height, width,
-                                                                alpha, beta, gamma,
-                                                                dtype, device)
+    assert skip in [0, 1, 2],\
+        f"`get_bucket_ids_2d` only support skip is 0, 1 or 2, current skip={skip}"
+    bucket_ids, num_buckets, L = get_bucket_ids_2d_without_skip(
+        method, height, width, alpha, beta, gamma, dtype, device
+    )
 
     # add an extra encoding (id = num_buckets) for the classification token
     if skip > 0:
-        assert skip == 1, "`get_bucket_ids_2d` only support skip is 0 or 1"
-        new_bids = bucket_ids.new_empty(size=(skip + L, skip + L))
-        new_bids[0] = num_buckets
-        new_bids[:, 0] = num_buckets
-        new_bids[skip:, skip:] = bucket_ids
-        bucket_ids = new_bids
+        assert skip in [1, 2], "`get_bucket_ids_2d` only support skip is 0, 1 or 2"
+        if skip == 1:
+            # for non distillation
+            new_bids = bucket_ids.new_empty(size=(skip + L, skip + L))
+            new_bids[0] = num_buckets
+            new_bids[:, 0] = num_buckets
+            new_bids[skip:, skip:] = bucket_ids
+            bucket_ids = new_bids
+        elif skip == 2:
+            # for distillation
+            new_bids = bucket_ids.new_empty(size=(skip + L, skip + L))
+            new_bids[0] = num_buckets
+            new_bids[1] = num_buckets
+            new_bids[:, 0] = num_buckets
+            new_bids[:, 1] = num_buckets
+            new_bids[skip:, skip:] = bucket_ids
+            bucket_ids = new_bids
+
     bucket_ids = bucket_ids.contiguous()
     return bucket_ids, num_buckets + skip
 
@@ -537,6 +550,11 @@ class iRPE(nn.Module):
                                                    skip=skip, alpha=config.alpha,
                                                    beta=config.beta, gamma=config.gamma,
                                                    dtype=dtype, device=device)
+        # rp_bucket, num_buckets = get_bucket_ids_2d(method=self.method,
+        #                                            height=height, width=width,
+        #                                            skip=config.skip, alpha=config.alpha,
+        #                                            beta=config.beta, gamma=config.gamma,
+        #                                            dtype=dtype, device=device)
         assert num_buckets == self.num_buckets
 
         # transposed contextual
@@ -578,7 +596,6 @@ class iRPE(nn.Module):
             The shape is (B or 1, H, L, L),
             where D is the output dimension for each head.
         """
-
         B = len(x)  # batch_size
         L_query, L_key = rp_bucket.shape
         if self.mode == 'bias':
@@ -598,8 +615,8 @@ class iRPE(nn.Module):
             """
             lookup_table = torch.matmul(
                 x.transpose(0, 1).reshape(-1, B * L_query, self.head_dim),
-                self.lookup_table_weight).\
-                view(-1, B, L_query, self.num_buckets).transpose(0, 1)
+                self.lookup_table_weight
+            ).view(-1, B, L_query, self.num_buckets).transpose(0, 1)
             if RPEIndexFunction is not None:
                 return RPEIndexFunction.apply(lookup_table, rp_bucket)
             else:
@@ -635,8 +652,8 @@ class iRPE(nn.Module):
 
         B = len(x)  # batch_size
         L_query, L_key = rp_bucket.shape
-        assert self.mode == 'contextual', "Only support contextual \
-version in non-transposed version"
+        assert self.mode == 'contextual', ("Only support contextual"
+                            "version in non-transposed version")
         weight = self.lookup_table_weight[:, rp_bucket.flatten()].\
             view(self.num_heads, L_query, L_key, self.head_dim)
         # (H, L_query, B, L_key) @ (H, L_query, L_key, D) = (H, L_query, B, D)
@@ -759,6 +776,7 @@ def get_single_rpe_config(ratio=1.9,
     config.alpha = 1 * ratio
     config.beta = 2 * ratio
     config.gamma = 8 * ratio
+    config.skip = skip
 
     # set the number of buckets
     config.num_buckets = get_num_buckets(method,

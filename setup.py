@@ -14,7 +14,7 @@ __version__ = f'0.0.1.{gen_code()}'
 
 setup(name='kd_lab',
       version=__version__,
-      description='INW Classification with SSL',
+      description='INW Classification with KD',
       author='tor4z',
       author_email='vwenjie@hotmail.com',
       install_requires=[
