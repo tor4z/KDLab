@@ -2,3 +2,4 @@ import:
   - ./distill
 
 target_model: best
+distill_dim: 2048
