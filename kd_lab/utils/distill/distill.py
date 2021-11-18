@@ -66,5 +66,5 @@ class BaseDistillTrainer(BaseTrainer):
         self.dashboard.add_trace_dict({
             'teacher_loss': self.teacher_loss_meter.avg,
             'student_loss': self.student_loss_meter.avg
-        })
+        }, training=True)
         super().on_epoch_end()
