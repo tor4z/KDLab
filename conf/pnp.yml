@@ -2,6 +2,8 @@ arch:
   # Distillation
   DistillTeacherResNet50ClsTrainer:
     - arch/resnet50.yml
+
+  # iRPE distill
   OfflineResNetIRPEDistiller:
     - arch/rpe.yml
     - distill/off_distill.yml
@@ -15,6 +17,23 @@ arch:
     - distill/off_distill_rep.yml
   OnlineResNetIRPERepDistiller:
     - arch/rpe.yml
+    - arch/resnet50.yml
+    - distill/on_distill_rep.yml
+
+  # Deit distill
+  OfflineResNetDeitDistiller:
+    - arch/deit.yml
+    - distill/off_distill.yml
+  OnlineResNetDeitDistiller:
+    - arch/deit.yml
+    - arch/resnet50.yml
+    - distill/on_distill.yml
+
+  OfflineResNetDeitRepDistiller:
+    - arch/deit.yml
+    - distill/off_distill_rep.yml
+  OnlineResNetDeitRepDistiller:
+    - arch/deit.yml
     - arch/resnet50.yml
     - distill/on_distill_rep.yml
 

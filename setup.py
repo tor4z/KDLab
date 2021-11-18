@@ -33,6 +33,7 @@ setup(name='kd_lab',
                 # classification networks
                 'kd_lab.network.resnet',
                 'kd_lab.network.vit',
+                'kd_lab.network.deit',
                 'kd_lab.network.iRPE',
                 'kd_lab.network.iRPE.rpe_ops',
                 # trainer
@@ -44,6 +45,8 @@ setup(name='kd_lab',
                 # dsitillation trainer
                 'kd_lab.trainer.distill_resnet_iRPE',
                 'kd_lab.trainer.distill_resnet_iRPE_rep',
+                'kd_lab.trainer.deit',
+                'kd_lab.trainer.deit_rep',
                 # utils
                 'kd_lab.utils',
                 'kd_lab.utils.data',
