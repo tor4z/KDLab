@@ -7,3 +7,6 @@ from .iRPE.rpe import *
 # For distillation
 from .distill_resnet_iRPE.distill_resnet_iRPE import *
 from .distill_resnet_iRPE.resnet import *
+
+from .distill_resnet_iRPE_rep.distill_resnet_iRPE_rep import *
+from .distill_resnet_iRPE.resnet import *

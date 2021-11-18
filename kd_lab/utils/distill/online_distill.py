@@ -59,7 +59,7 @@ class OnlineDistillTrainer(BaseDistillTrainer):
         loss.backward()
         self.teacher_optimizer.step()
 
-        return loss, logits
+        return loss.detach(), logits.detach()
 
     def train_student_step(
         self, *item: Tuple[Any]

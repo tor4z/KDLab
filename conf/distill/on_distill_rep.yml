@@ -1,0 +1,4 @@
+import:
+  - ./distill
+
+distill_dim: 2048

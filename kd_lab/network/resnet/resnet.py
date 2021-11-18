@@ -1,4 +1,4 @@
-from typing import Any, Mapping, Optional
+from typing import Any, Mapping, Optional, Tuple
 from torch import nn
 from torch import Tensor
 from torchvision.models.resnet import *
@@ -45,14 +45,21 @@ class ResNet(nn.Module):
                 'progress': opt.progress
             }
         self.backbone = _resnet_dict[backbone](**resnet_kws)
-        self.backbone.fc = nn.Linear(512 * self.get_expansion(backbone),
+        self.backbone.fc = nn.Identity()
+        self.fc = nn.Linear(512 * self.get_expansion(backbone),
                                      opt.num_classes)
 
     @classmethod
     def get_expansion(cls, backbone: str) -> int:
         return cls.expansion_dict[backbone]
 
-    def forward(self, x: Tensor) -> Tensor:
-        x = self.backbone(x)
+    def forward(
+        self, x: Tensor, return_rep: bool=False
+    ) -> Tuple[Tuple[Tensor, Tensor], Tensor]:
+        rep = self.backbone(x)
+        x = self.fc(rep)
         # x = torch.flatten(x, 0)
-        return x
+        if return_rep:
+            return x, rep
+        else:
+            return x

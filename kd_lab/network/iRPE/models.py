@@ -24,7 +24,15 @@ class DistilledVisionTransformer(VisionTransformer):
         self.dist_token = nn.Parameter(torch.zeros(1, 1, self.embed_dim))
         num_patches = self.patch_embed.num_patches
         self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 2, self.embed_dim))
-        self.head_dist = nn.Linear(self.embed_dim, self.num_classes) if self.num_classes > 0 else nn.Identity()
+        if 'distill_dim' in kwargs:
+            distill_dim = kwargs['distill_dim']
+        else:
+            distill_dim = self.num_classes
+
+        if distill_dim > 0:
+            self.head_dist = nn.Linear(self.embed_dim, distill_dim)
+        else:
+            self.head_dist = nn.Identity()
 
         trunc_normal_(self.dist_token, std=.02)
         trunc_normal_(self.pos_embed, std=.02)
@@ -58,7 +66,10 @@ class DistilledVisionTransformer(VisionTransformer):
             return x, x_dist
         else:
             # during inference, return the average of both classifier predictions
-            return (x + x_dist) / 2
+            if x.shape == x_dist.shape:
+                return (x + x_dist) / 2
+            else:
+                return x
 
 
 def deit_tiny_patch16_224(pretrained=False, **kwargs):

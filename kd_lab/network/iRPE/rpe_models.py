@@ -794,6 +794,6 @@ def get_deit_rpe(opt):
     kws = {
         'pretrained': opt.get('pretrained', False),
         'num_classes': opt.num_classes,
-        # 'img_size': opt.input_size
+        'distill_dim': opt.get('distill_dim', opt.num_classes)
     }
     return deit_rpe_dict[opt.model](**kws)

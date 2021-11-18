@@ -43,6 +43,7 @@ setup(name='kd_lab',
                 'kd_lab.trainer.iRPE',
                 # dsitillation trainer
                 'kd_lab.trainer.distill_resnet_iRPE',
+                'kd_lab.trainer.distill_resnet_iRPE_rep',
                 # utils
                 'kd_lab.utils',
                 'kd_lab.utils.data',

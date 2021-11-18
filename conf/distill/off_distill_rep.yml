@@ -1,0 +1,4 @@
+import:
+  - ./distill
+
+target_model: best
